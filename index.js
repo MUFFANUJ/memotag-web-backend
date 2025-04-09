@@ -14,13 +14,12 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
 app.use(express.json());
+
 app.post('/send-note', async (req, res) => {
   const { to, subject, content } = req.body;
-
   if (!to || !subject || !content) {
     return res.status(400).json({ message: 'to, subject, and content are required' });
   }
-
   try {
     await transporter.sendMail({
       from: `"CONTACT FORM QUERY " <${process.env.EMAIL_USER}>`,
@@ -28,7 +27,6 @@ app.post('/send-note', async (req, res) => {
       subject: subject,
       text: content,
     });
-
     res.status(200).json({ message: 'Email Sent Successfully!' });
   } catch (err) {
     console.error(err);
@@ -36,10 +34,13 @@ app.post('/send-note', async (req, res) => {
   }
 });
 
-app.get("/hello",(req,res)=>{
-  res.send({message:"Its Working buddy!"})
-})
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on http://localhost:${process.env.PORT}`);
+app.get("/hello", (req, res) => {
+  res.send({ message: "Its Working buddy!" });
 });
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+module.exports = app;
