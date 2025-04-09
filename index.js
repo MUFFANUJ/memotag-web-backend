@@ -4,9 +4,16 @@ require('dotenv').config();
 const cors = require('cors');
 
 const app = express();
-app.use(express.json());
-app.use(cors()); 
 
+const corsOptions = {
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
+app.use(express.json());
 app.post('/send-note', async (req, res) => {
   const { to, subject, content } = req.body;
 
